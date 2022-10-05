@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pract-backend-02-deployment
+spec:
+  selector:
+   matchLabels:
+    app: backend-02-jenkins
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend-02-jenkins
+    spec:
+      containers:
+        - name: backend-02-jenkins
+          image: 'aldavid/react-backend:tag'
+          ports:
+            - containerPort: 8080
+              name: prac-02-port
+          imagePullPolicy: Always
+          env:
+          - name: nombre
+            value: "Paco"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend-02-jenkins-service
+  labels:
+    app: backend-02-jenkins
+spec:   
+  ports:
+  - name: backend-02-jenkins
+    port: 8080
+    nodePort : 31555
+  #type: LoadBalancer
+  type: NodePort
+  selector:
+   app: backend-02-jenkins
